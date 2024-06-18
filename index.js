@@ -25,11 +25,22 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const upcomingEventImages = client.db("sge").collection("upcoming-event-img");
+    const marqueeList = client.db("sge").collection("marquee-list");
 
     //get upcoming event images
     app.get("/upcoming-events", async (req, res) => {
       try {
         const result = await upcomingEventImages.find().toArray();
+        res.send(result);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        res.status(500).send({ error: "An error occurred while fetching upcoming events" });
+      }
+    });
+    //get marquee list
+    app.get("/marquee-list", async (req, res) => {
+      try {
+        const result = await marqueeList.find().toArray();
         res.send(result);
       } catch (error) {
         console.error("Error fetching upcoming events:", error);
