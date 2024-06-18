@@ -79,6 +79,20 @@ async function run() {
           .send({ error: "An error occurred while fetching upcoming events" });
       }
     });
+    const consultationForms = client.db("sge").collection("consultation-forms");
+    //insert consultation forms data into database
+    app.post("/consultation-forms", async (req, res) => {
+      try {
+        const formData = req.body;
+        const result = await consultationForms.insertOne(formData);
+        res.send(result);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        res
+          .status(500)
+          .send({ error: "An error occurred while fetching upcoming events" });
+      }
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
