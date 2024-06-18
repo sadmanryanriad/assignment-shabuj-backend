@@ -66,6 +66,19 @@ async function run() {
           .send({ error: "An error occurred while fetching upcoming events" });
       }
     });
+    const eventList = client.db("sge").collection("event-list");
+    //get event-list
+    app.get("/event-list", async (req, res) => {
+      try {
+        const result = await eventList.find().toArray();
+        res.send(result);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        res
+          .status(500)
+          .send({ error: "An error occurred while fetching upcoming events" });
+      }
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
