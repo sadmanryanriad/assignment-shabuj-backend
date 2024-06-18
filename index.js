@@ -24,7 +24,9 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-    const upcomingEventImages = client.db("sge").collection("upcoming-event-img");
+    const upcomingEventImages = client
+      .db("sge")
+      .collection("upcoming-event-img");
     const marqueeList = client.db("sge").collection("marquee-list");
 
     //get upcoming event images
@@ -34,7 +36,9 @@ async function run() {
         res.send(result);
       } catch (error) {
         console.error("Error fetching upcoming events:", error);
-        res.status(500).send({ error: "An error occurred while fetching upcoming events" });
+        res
+          .status(500)
+          .send({ error: "An error occurred while fetching upcoming events" });
       }
     });
     //get marquee list
@@ -44,7 +48,22 @@ async function run() {
         res.send(result);
       } catch (error) {
         console.error("Error fetching upcoming events:", error);
-        res.status(500).send({ error: "An error occurred while fetching upcoming events" });
+        res
+          .status(500)
+          .send({ error: "An error occurred while fetching upcoming events" });
+      }
+    });
+    const SuccessStoryList = client.db("sge").collection("success-story-list");
+    //get success-story-list
+    app.get("/success-story-list", async (req, res) => {
+      try {
+        const result = await SuccessStoryList.find().toArray();
+        res.send(result);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        res
+          .status(500)
+          .send({ error: "An error occurred while fetching upcoming events" });
       }
     });
 
