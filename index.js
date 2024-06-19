@@ -194,6 +194,29 @@ async function run() {
           .send({ error: "An error occurred while fetching upcoming events" });
       }
     });
+    //get consultation forms data
+    app.get("/consultation-forms", async (req, res) => {
+      try {
+        const result = await consultationForms.find().toArray();
+        res.send(result);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        res
+          .status(500)
+          .send({ error: "An error occurred while fetching upcoming events" });
+      }
+    });
+      //delete consultation Form by id
+      app.delete("/consultation-forms/:id", async (req, res) => {
+        try {
+          const id = req.params.id;
+          const query = { _id: new ObjectId(id) };
+          const result = await consultationForms.deleteOne(query);
+          res.send(result);
+        } catch (error) {
+          req.send({ error: "An error occurred while fetching upcoming events" });
+        }
+      });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
