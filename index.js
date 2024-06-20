@@ -240,7 +240,7 @@ async function run() {
         // const { _id, ...formDataWithoutID } = formData;
         // console.log(formDataWithoutID);
         const query = { _id: new ObjectId(id) };
-        console.log(formData);
+        // console.log(formData);
         const updateDocument = {
           $set: formData
         };
