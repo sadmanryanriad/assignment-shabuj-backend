@@ -179,7 +179,6 @@ async function run() {
       }
     });
 
-
     const consultationForms = client.db("sge").collection("consultation-forms");
     //insert consultation forms data into database
     app.post("/consultation-forms", async (req, res) => {
@@ -206,32 +205,52 @@ async function run() {
           .send({ error: "An error occurred while fetching upcoming events" });
       }
     });
-      //delete consultation Form by id
-      app.delete("/consultation-forms/:id", async (req, res) => {
-        try {
-          const id = req.params.id;
-          const query = { _id: new ObjectId(id) };
-          const result = await consultationForms.deleteOne(query);
-          res.send(result);
-        } catch (error) {
-          req.send({ error: "An error occurred while fetching upcoming events" });
-        }
-      });
+    //delete consultation Form by id
+    app.delete("/consultation-forms/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const query = { _id: new ObjectId(id) };
+        const result = await consultationForms.deleteOne(query);
+        res.send(result);
+      } catch (error) {
+        req.send({ error: "An error occurred while fetching upcoming events" });
+      }
+    });
 
-
-      const coreStrength = client.db("sge").collection("core-strengths");
-      //get core Strength
-      app.get("/core-strength", async (req, res) => {
-        try {
-          const result = await coreStrength.find().toArray();
-          res.send(result);
-        } catch (error) {
-          console.error("Error fetching upcoming events:", error);
-          res
-            .status(500)
-            .send({ error: "An error occurred while fetching upcoming events" });
-        }
-      });
+    const coreStrength = client.db("sge").collection("core-strengths");
+    //get core Strength
+    app.get("/core-strength", async (req, res) => {
+      try {
+        const result = await coreStrength.find().toArray();
+        res.send(result);
+      } catch (error) {
+        console.error("Error fetching upcoming events:", error);
+        res
+          .status(500)
+          .send({ error: "An error occurred while fetching upcoming events" });
+      }
+    });
+    // Update core strength by id
+    app.patch("/core-strength/:id", async (req, res) => {
+      try {
+        const id = req.params.id;
+        const formData = {...req.body};
+        delete formData._id; //cannot chnage _id for patch
+        //another way to remove id from the formData object:
+        // const { _id, ...formDataWithoutID } = formData;
+        // console.log(formDataWithoutID);
+        const query = { _id: new ObjectId(id) };
+        console.log(formData);
+        const updateDocument = {
+          $set: formData
+        };
+        const result = await coreStrength.updateOne(query, updateDocument);
+        res.send(result);
+      } catch (error) {
+        console.error("Error updating core strength:", error);
+        res.status(500).send({ error: "An error occurred while updating core strength" });
+      }
+    });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
