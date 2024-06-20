@@ -218,11 +218,26 @@ async function run() {
         }
       });
 
+
+      const coreStrength = client.db("sge").collection("core-strengths");
+      //get core Strength
+      app.get("/core-strength", async (req, res) => {
+        try {
+          const result = await coreStrength.find().toArray();
+          res.send(result);
+        } catch (error) {
+          console.error("Error fetching upcoming events:", error);
+          res
+            .status(500)
+            .send({ error: "An error occurred while fetching upcoming events" });
+        }
+      });
+
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    // await client.db("admin").command({ ping: 1 });
+    // console.log(
+    //   "Pinged your deployment. You successfully connected to MongoDB!"
+    // );
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
   }
